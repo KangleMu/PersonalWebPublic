@@ -29,12 +29,16 @@ const setCache = (payload: ScholarCache["payload"]) => {
   };
 };
 
-const parseMetric = (table: Array<{ citations?: string; all?: string }> | undefined, name: string) => {
-  const value = table?.find((row) => row.citations === name)?.all ?? "0";
-  return Number.parseInt(value.replace(/,/g, ""), 10) || 0;
+const parseMetric = (html: string, label: string) => {
+  const regex = new RegExp(
+    `${label}<\\/a>\\s*<\\/td>\\s*<td class="gsc_rsb_std">(\\d[\\d,]*)<`,
+    "i"
+  );
+  const match = html.match(regex);
+  return match ? Number.parseInt(match[1].replace(/,/g, ""), 10) || 0 : 0;
 };
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ request }) => {
   const cached = getCache();
   if (cached) {
     return new Response(JSON.stringify(cached.payload), {
@@ -43,14 +47,16 @@ export const GET: APIRoute = async () => {
     });
   }
 
-  const apiKey = import.meta.env.SERPAPI_KEY;
-  const authorId = import.meta.env.PUBLIC_GOOGLE_SCHOLAR_AUTHOR_ID;
+  const authorId =
+    new URL(request.url).searchParams.get("authorId") ??
+    import.meta.env.PUBLIC_GOOGLE_SCHOLAR_AUTHOR_ID ??
+    "3nL-yukAAAAJ";
 
-  if (!apiKey || !authorId) {
+  if (!authorId) {
     return new Response(
       JSON.stringify({
         status: "missing_config",
-        message: "Set SERPAPI_KEY and PUBLIC_GOOGLE_SCHOLAR_AUTHOR_ID to enable stats."
+        message: "Set PUBLIC_GOOGLE_SCHOLAR_AUTHOR_ID or pass ?authorId=... to enable stats."
       }),
       {
         status: 200,
@@ -59,17 +65,21 @@ export const GET: APIRoute = async () => {
     );
   }
 
-  const url = new URL("https://serpapi.com/search.json");
-  url.searchParams.set("engine", "google_scholar_author");
-  url.searchParams.set("author_id", authorId);
-  url.searchParams.set("api_key", apiKey);
+  const url = new URL("https://scholar.google.com/citations");
+  url.searchParams.set("user", authorId);
+  url.searchParams.set("hl", "en");
 
-  const response = await fetch(url.toString());
+  const response = await fetch(url.toString(), {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+  });
   if (!response.ok) {
     return new Response(
       JSON.stringify({
         status: "error",
-        message: "Unable to fetch citation stats from SerpAPI."
+        message: "Unable to fetch citation stats from Google Scholar."
       }),
       {
         status: 200,
@@ -78,11 +88,10 @@ export const GET: APIRoute = async () => {
     );
   }
 
-  const data = await response.json();
-  const table = data?.cited_by?.table ?? [];
-  const citations = parseMetric(table, "Citations");
-  const hIndex = parseMetric(table, "h-index");
-  const i10Index = parseMetric(table, "i10-index");
+  const html = await response.text();
+  const citations = parseMetric(html, "Citations");
+  const hIndex = parseMetric(html, "h-index");
+  const i10Index = parseMetric(html, "i10-index");
 
   const payload = {
     status: "ok",
@@ -90,7 +99,7 @@ export const GET: APIRoute = async () => {
     hIndex,
     i10Index,
     updatedAt: new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }),
-    source: "SerpAPI"
+    source: "Google Scholar"
   };
 
   setCache(payload);
