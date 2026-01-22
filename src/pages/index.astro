@@ -1,0 +1,286 @@
+---
+const authorName = "Phil Mu";
+const scholarAuthorId = import.meta.env.PUBLIC_GOOGLE_SCHOLAR_AUTHOR_ID ?? "YOUR_AUTHOR_ID";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{authorName} | Research & Publications</title>
+    <meta
+      name="description"
+      content="Personal website for research, publications, and live Google Scholar citation statistics."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f8fb;
+        --text: #101828;
+        --muted: #475467;
+        --card: #ffffff;
+        --accent: #1f4bb8;
+        --border: #e4e7ec;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 24px 80px;
+      }
+
+      header {
+        display: grid;
+        gap: 16px;
+        align-items: center;
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: 0.8rem;
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 4vw, 3.5rem);
+        margin: 0;
+      }
+
+      p {
+        margin: 0;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+
+      .hero {
+        display: grid;
+        gap: 24px;
+        background: var(--card);
+        padding: 32px;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(16, 24, 40, 0.08);
+        border: 1px solid var(--border);
+      }
+
+      .hero-columns {
+        display: grid;
+        gap: 24px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        align-items: center;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        padding: 24px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+      }
+
+      .stat {
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: #f9fafb;
+      }
+
+      .stat h3 {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .stat span {
+        display: block;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-top: 8px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(31, 75, 184, 0.1);
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .link {
+        padding: 10px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: #ffffff;
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .link.primary {
+        background: var(--accent);
+        color: white;
+        border-color: transparent;
+      }
+
+      .section-grid {
+        display: grid;
+        gap: 24px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        margin-top: 32px;
+      }
+
+      footer {
+        margin-top: 56px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Researcher • Educator • Builder</div>
+        <h1>{authorName}</h1>
+        <p>
+          Welcome to my personal research hub. I share my latest publications, teaching
+          updates, and live Google Scholar citation statistics.
+        </p>
+        <div class="hero-columns">
+          <div class="card">
+            <span class="pill">Live Google Scholar Stats</span>
+            <div class="stats" id="scholar-stats">
+              <div class="stat">
+                <h3>Citations</h3>
+                <span data-stat="citations">—</span>
+              </div>
+              <div class="stat">
+                <h3>h-index</h3>
+                <span data-stat="hIndex">—</span>
+              </div>
+              <div class="stat">
+                <h3>i10-index</h3>
+                <span data-stat="i10Index">—</span>
+              </div>
+            </div>
+            <p id="scholar-updated">Loading live stats...</p>
+          </div>
+          <div class="card">
+            <h2>Focus Areas</h2>
+            <p>Machine learning, data science, and human-centered computing.</p>
+            <div class="links">
+              <a class="link primary" href="#">Download CV</a>
+              <a class="link" href="#">Email</a>
+              <a
+                class="link"
+                href={`https://scholar.google.com/citations?user=${scholarAuthorId}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Google Scholar
+              </a>
+            </div>
+            <p>
+              Replace the links above with your real CV, email, and other profiles.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <div class="card">
+          <h2>Publications</h2>
+          <p>
+            Feature your most impactful papers here. You can add links to PDFs, DOIs,
+            or conference pages.
+          </p>
+        </div>
+        <div class="card">
+          <h2>Teaching</h2>
+          <p>
+            Highlight courses, advising, or teaching philosophy. This section can be
+            expanded into a dedicated page later.
+          </p>
+        </div>
+        <div class="card">
+          <h2>Projects</h2>
+          <p>
+            Showcase ongoing collaborations, lab work, or open-source initiatives.
+          </p>
+        </div>
+      </section>
+
+      <footer>
+        <p>Google Scholar author ID: {scholarAuthorId}</p>
+        <p>Built with Astro. Deployed on your hosting platform of choice.</p>
+      </footer>
+    </main>
+
+    <script>
+      const statsContainer = document.querySelector("#scholar-stats");
+      const updatedEl = document.querySelector("#scholar-updated");
+      const statMap = {
+        citations: statsContainer?.querySelector('[data-stat="citations"]'),
+        hIndex: statsContainer?.querySelector('[data-stat="hIndex"]'),
+        i10Index: statsContainer?.querySelector('[data-stat="i10Index"]')
+      };
+
+      const formatNumber = (value) =>
+        typeof value === "number" ? value.toLocaleString("en-US") : "—";
+
+      fetch("/api/scholar.json")
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data || data.status !== "ok") {
+            updatedEl.textContent =
+              data?.message ?? "Citation stats unavailable. Check API configuration.";
+            return;
+          }
+
+          statMap.citations.textContent = formatNumber(data.citations);
+          statMap.hIndex.textContent = formatNumber(data.hIndex);
+          statMap.i10Index.textContent = formatNumber(data.i10Index);
+          updatedEl.textContent = `Updated ${data.updatedAt}. Source: ${data.source}.`;
+        })
+        .catch(() => {
+          updatedEl.textContent = "Citation stats unavailable. Try again later.";
+        });
+    </script>
+  </body>
+</html>
