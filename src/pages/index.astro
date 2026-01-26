@@ -1,263 +1,663 @@
 ---
-const authorName = "Kangle(Phil) Mu";
+import portraitSquare from "../assets/figures/portrait_square.jpeg";
+
+const authorName = "Hi, I'm Phil";
 const scholarAuthorId = import.meta.env.PUBLIC_GOOGLE_SCHOLAR_AUTHOR_ID ?? "3nL-yukAAAAJ";
+const bibtexGrantfree = `@article{mu2024grantfree,
+  title={Low-Latency Grant-Free Random Access for 6G NR},
+  author={Mu, Kangle and Collaborators},
+  journal={IEEE Transactions on Wireless Communications},
+  year={2024}
+}`;
+const bibtexMobility = `@inproceedings{mu2023mobility,
+  title={Scheduling with Mobility-Aware Prediction in NR},
+  author={Mu, Kangle and Collaborators},
+  booktitle={IEEE Globecom},
+  year={2023}
+}`;
+const bibtexComacro = `@inproceedings{mu2022comacro,
+  title={PHY/MAC Co-Design for Multi-User Access},
+  author={Mu, Kangle and Collaborators},
+  booktitle={IEEE ICC},
+  year={2022}
+}`;
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{authorName} | Research & Publications</title>
+    <title>{authorName} | Research & Engineering</title>
     <meta
       name="description"
-      content="Personal website for research, publications, and live Google Scholar citation statistics."
+      content="PhD Candidate | 5G/6G Wireless Engineer. Random access, scheduling, PHY/MAC simulation, 3GPP."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=Montserrat:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
         color-scheme: light;
-        --bg: #f6f8fb;
-        --text: #101828;
-        --muted: #475467;
-        --card: #ffffff;
-        --accent: #1f4bb8;
-        --border: #e4e7ec;
+        --bg: #ffffff;
+        --text: #0f1115;
+        --muted: #596070;
+        --line: #e2e4ea;
+        --chip: #f4f5f7;
+        --focus: #111827;
       }
 
       * {
         box-sizing: border-box;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
-        font-family: "Inter", system-ui, sans-serif;
+        font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
         color: var(--text);
         background: var(--bg);
+        line-height: 1.6;
       }
 
       main {
-        max-width: 1100px;
+        max-width: 1280px;
         margin: 0 auto;
-        padding: 48px 24px 80px;
+        padding: 72px 24px 96px;
       }
 
       header {
         display: grid;
-        gap: 16px;
-        align-items: center;
-        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+        padding-bottom: 32px;
+      }
+
+      .page-frame {
+        position: relative;
+        isolation: isolate;
+      }
+
+      .page-frame::before {
+        content: none;
       }
 
       .eyebrow {
         text-transform: uppercase;
-        letter-spacing: 0.16em;
-        font-size: 0.8rem;
+        letter-spacing: 0.22em;
+        font-size: 0.75rem;
         color: var(--muted);
         font-weight: 600;
+        padding-top: 100px;
       }
 
       h1 {
-        font-size: clamp(2.2rem, 4vw, 3.5rem);
+        font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+        font-weight: 500;
+        font-size: clamp(2.6rem, 4.5vw, 4rem);
         margin: 0;
+      }
+
+      .name-typewriter {
+        display: inline-flex;
+        align-items: center;
+        min-width: 6ch;
+        margin-left: 8px;
+      }
+
+      .name-typewriter::after {
+        content: "";
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        margin-left: 6px;
+        background: currentColor;
+        animation: caretBlink 0.9s steps(2, start) infinite;
+      }
+
+      @keyframes caretBlink {
+        0%,
+        100% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      h2 {
+        font-size: 1.4rem;
+        margin: 0 0 8px 0;
+      }
+
+      h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.05rem;
       }
 
       p {
         margin: 0;
-        line-height: 1.6;
         color: var(--muted);
+      }
+
+      a {
+        color: inherit;
       }
 
       .hero {
         display: grid;
-        gap: 24px;
-        background: var(--card);
-        padding: 32px;
-        border-radius: 24px;
-        box-shadow: 0 20px 60px rgba(16, 24, 40, 0.08);
-        border: 1px solid var(--border);
+        gap: 32px;
+        border: none;
+        border-radius: 0;
+        padding: 0 0 16px;
+        padding-bottom: 60px;
+        padding-top: 100px;
+        background: transparent;
       }
 
-      .hero-columns {
+      .hero-grid {
         display: grid;
-        gap: 24px;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 32px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
         align-items: center;
       }
 
-      .card {
-        background: var(--card);
-        border-radius: 20px;
-        border: 1px solid var(--border);
-        padding: 24px;
+      .title-block {
         display: grid;
-        gap: 16px;
+        gap: 12px;
+      }
+
+      .subtitle {
+        font-size: 1.05rem;
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .positioning {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 0.95rem;
+      }
+
+      .positioning span {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--chip);
+        border: 1px solid var(--line);
+      }
+
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .cta {
+        text-decoration: none;
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        font-weight: 600;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .cta.primary {
+        border-color: var(--text);
+        background: var(--text);
+        color: #ffffff;
+      }
+
+      .cta:hover {
+        transform: translateY(-1px);
+        border-color: var(--focus);
+      }
+
+      .cta.linkedin {
+        background: #0a66c2;
+        border-color: #0a66c2;
+        color: #ffffff;
+      }
+
+      .cta.linkedin:hover {
+        border-color: #084e96;
+      }
+
+      .cta.scholar {
+        background: #4285f4;
+        border-color: #4285f4;
+        color: #ffffff;
+      }
+
+      .cta.scholar:hover {
+        border-color: #2b6bd3;
+      }
+
+      .portrait-wrap {
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 80px;
+      }
+
+      .portrait {
+        width: 280px;
+        max-width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        object-fit: cover;
       }
 
       .stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 16px;
-      }
-
-      .stat {
-        padding: 16px;
-        border-radius: 16px;
-        border: 1px solid var(--border);
-        background: #f9fafb;
-      }
-
-      .stat h3 {
-        margin: 0;
-        font-size: 0.9rem;
-        color: var(--muted);
-        font-weight: 600;
-      }
-
-      .stat span {
-        display: block;
-        font-size: 1.6rem;
-        font-weight: 700;
-        margin-top: 8px;
-      }
-
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 12px;
-        border-radius: 999px;
-        background: rgba(31, 75, 184, 0.1);
-        color: var(--accent);
-        font-weight: 600;
-        font-size: 0.85rem;
-      }
-
-      .links {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
       }
 
-      .link {
-        padding: 10px 16px;
+      .stat-capsule {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 12px 18px;
         border-radius: 999px;
-        border: 1px solid var(--border);
+        border: 1px solid var(--line);
         background: #ffffff;
-        color: var(--text);
-        text-decoration: none;
         font-weight: 600;
       }
 
-      .link.primary {
-        background: var(--accent);
-        color: white;
-        border-color: transparent;
-      }
-
-      .section-grid {
-        display: grid;
-        gap: 24px;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        margin-top: 32px;
-      }
-
-      footer {
-        margin-top: 56px;
+      .stat-capsule .label {
+        font-size: 0.7rem;
         color: var(--muted);
-        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+      }
+
+      .stat-capsule .value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      @media (max-width: 720px) {
+        .stat-capsule {
+          width: 100%;
+          justify-content: space-between;
+        }
+      }
+
+      .section {
+        margin-top: 56px;
+        display: grid;
+        gap: 20px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .section-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      .grid-3 {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 22px;
+        background: #ffffff;
+        display: grid;
+        gap: 12px;
+        min-height: 140px;
+      }
+
+      .project-card {
+        display: grid;
+        gap: 14px;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tag {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 0.8rem;
+        background: var(--chip);
+      }
+
+      .publications {
+        display: grid;
+        gap: 16px;
+      }
+
+      .pub-item {
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: #ffffff;
+      }
+
+      details {
+        margin-top: 10px;
+      }
+
+      summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      pre {
+        margin: 10px 0 0;
+        padding: 12px;
+        background: #f7f7f9;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-size: 0.85rem;
+      }
+
+      .contact {
+        display: grid;
+        gap: 8px;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      #scholar-updated {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        opacity: 0.75;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s ease both;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 720px) {
+        main {
+          padding: 56px 20px 80px;
+        }
+
+        .hero {
+          padding: 28px 24px;
+        }
       }
     </style>
   </head>
   <body>
-    <main>
-      <section class="hero">
-        <div class="eyebrow">Researcher • Educator • Builder</div>
-        <h1>{authorName}</h1>
-        <p>
-          Welcome to my personal research hub. I share my latest publications, teaching
-          updates, and live Google Scholar citation statistics.
-        </p>
-        <div class="hero-columns">
-          <div class="card">
-            <span class="pill">Live Google Scholar Stats</span>
-            <div class="stats" id="scholar-stats">
-              <div class="stat">
-                <h3>Citations</h3>
-                <span data-stat="citations">—</span>
-              </div>
-              <div class="stat">
-                <h3>h-index</h3>
-                <span data-stat="hIndex">—</span>
-              </div>
-              <div class="stat">
-                <h3>i10-index</h3>
-                <span data-stat="i10Index">—</span>
-              </div>
+    <main class="page-frame">
+      <header class="hero fade-in" id="top">
+        <!-- <div class="eyebrow">Researcher × Engineer</div> -->
+        <div class="hero-grid">
+          <div class="title-block">
+            <h1>
+              Hi, I'm
+              <span class="name-typewriter" aria-live="polite" data-names="Phil.,Kangle., 康 乐"></span>
+            </h1>
+            <div class="subtitle" style="padding-bottom: 12px;">PhD Candidate in Wireless Communications</div>
+            <!-- <p>
+              Random Access, Scheduling, PHY/MAC simulation, 3GPP.
+            </p> -->
+            <div class="positioning">
+              <span>5G NR</span>
+              <span>Wireless Spectrum Sharing</span>
+              <span>Network Economics</span>
+              <span>Game Theory</span>
+              <span>Wireless Communications</span>
+              <span>Reinforcement Learning</span>
             </div>
-            <p id="scholar-updated">Loading live stats...</p>
-          </div>
-          <div class="card">
-            <h2>Focus Areas</h2>
-            <p>Machine learning, data science, and human-centered computing.</p>
-            <div class="links">
-              <a class="link primary" href="#">Download CV</a>
-              <a class="link" href="#">Email</a>
+            <div class="cta-row">
+              <a class="cta primary" href="#">CV</a>
               <a
-                class="link"
-                href="https://www.linkedin.com/in/kangle-mu-8b343a224/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn
-              </a>
-              <a
-                class="link"
+                class="cta scholar"
                 href={`https://scholar.google.com/citations?user=${scholarAuthorId}`}
                 target="_blank"
                 rel="noreferrer"
               >
                 Google Scholar
               </a>
+              <a
+                class="cta linkedin"
+                href="https://www.linkedin.com/in/kangle-mu-8b343a224/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn
+              </a>
             </div>
-            <p>
-              Replace the links above with your real CV, email, and other profiles.
+          </div>
+          <div class="portrait-wrap">
+            <img
+              class="portrait"
+              src={portraitSquare.src}
+              alt={`${authorName} portrait`}
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </header>
+
+      <section class="section" id="stats">
+        <div class="section-title">
+          <h2>Live Google Scholar Stats</h2>
+        </div>
+        <div>
+          <div class="stats" id="scholar-stats">
+            <div class="stat-capsule">
+              <span class="label">Citations</span>
+              <span class="value" data-stat="citations">—</span>
+            </div>
+            <div class="stat-capsule">
+              <span class="label">h-index</span>
+              <span class="value" data-stat="hIndex">—</span>
+            </div>
+            <div class="stat-capsule">
+              <span class="label">i10-index</span>
+              <span class="value" data-stat="i10Index">—</span>
+            </div>
+          </div>
+          <p class="muted" id="scholar-updated">Loading live stats...</p>
+        </div>
+      </section>
+
+      <section class="section" id="education">
+        <div class="section-title">
+          <h2>Education</h2>
+        </div>
+        <div class="publications">
+          <div class="pub-item">
+            <strong>PhD, ECE — Northwestern University</strong>
+            <p class="muted">Sept 2022 – Now</p>
+          </div>
+          <div class="pub-item">
+            <strong>MS, ECE — University of Michigan, Ann Arbor</strong>
+            <p class="muted">Aug 2020 – June 2022</p>
+          </div>
+          <div class="pub-item">
+            <strong>BS, Telecommunications Engineering — Xidian University, China</strong>
+            <p class="muted">Sep 2016 – Jun 2020</p>
+            <p class="muted">GPA: 3.90/4.00</p>
+            <p class="muted">
+              <span style="color: rgba(255, 170, 11, 0.887); font-weight: bold;">Graduated #1 in major (Class of 2020)</span>
             </p>
           </div>
         </div>
       </section>
 
-      <section class="section-grid">
-        <div class="card">
-          <h2>Publications</h2>
-          <p>
-            Feature your most impactful papers here. You can add links to PDFs, DOIs,
-            or conference pages.
-          </p>
+      <section class="section" id="highlights">
+        <div class="section-title">
+          <h2>Quick Highlights</h2>
         </div>
-        <div class="card">
-          <h2>Teaching</h2>
-          <p>
-            Highlight courses, advising, or teaching philosophy. This section can be
-            expanded into a dedicated page later.
-          </p>
-        </div>
-        <div class="card">
-          <h2>Projects</h2>
-          <p>
-            Showcase ongoing collaborations, lab work, or open-source initiatives.
-          </p>
+        <div class="grid-3">
+          <div class="card">
+            <h3>3GPP / NR Expertise</h3>
+            <p>
+              Deep familiarity with NR procedures, random access, and RAN1/2
+              standardization flows.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Simulation + Optimization</h3>
+            <p>
+              System-level and link-level simulations with analytical performance
+              tuning and KPI-driven optimization.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Publications + Awards</h3>
+            <p>
+              Peer-reviewed papers across 5G/6G access, scheduling, and PHY/MAC
+              design.
+            </p>
+          </div>
         </div>
       </section>
 
-      <footer>
-        <p>Google Scholar author ID: {scholarAuthorId}</p>
-        <p>Built with Astro. Deployed on your hosting platform of choice.</p>
-      </footer>
+      <section class="section" id="projects">
+        <div class="section-title">
+          <h2>Selected Projects</h2>
+        </div>
+        <div class="grid-3">
+          <div class="card project-card">
+            <div>
+              <h3>Grant-Free Random Access Framework</h3>
+              <p>
+                Joint detection and scheduling for ultra-reliable low-latency access
+                with dynamic collision resolution.
+              </p>
+            </div>
+            <div class="tags">
+              <span class="tag">NR RACH</span>
+              <span class="tag">Receiver Design</span>
+              <span class="tag">URllC</span>
+            </div>
+          </div>
+          <div class="card project-card">
+            <div>
+              <h3>MAC Scheduling Under Mobility</h3>
+              <p>
+                Predictive scheduling for high-speed scenarios, balancing throughput
+                and fairness constraints.
+              </p>
+            </div>
+            <div class="tags">
+              <span class="tag">MAC</span>
+              <span class="tag">Beam Tracking</span>
+              <span class="tag">Optimization</span>
+            </div>
+          </div>
+          <div class="card project-card">
+            <div>
+              <h3>PHY/MAC Co-Simulation Platform</h3>
+              <p>
+                Modular simulator for NR link adaptation, HARQ, and scheduling
+                evaluation at scale.
+              </p>
+            </div>
+            <div class="tags">
+              <span class="tag">Python/C++</span>
+              <span class="tag">System-Level</span>
+              <span class="tag">3GPP</span>
+            </div>
+          </div>
+          <div class="card project-card">
+            <div>
+              <h3>Massive MIMO Access Strategies</h3>
+              <p>
+                Joint beam selection and access control for dense user scenarios and
+                mixed traffic types.
+              </p>
+            </div>
+            <div class="tags">
+              <span class="tag">mMIMO</span>
+              <span class="tag">Beamforming</span>
+              <span class="tag">RAN1</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="publications">
+        <div class="section-title">
+          <h2>Publications</h2>
+        </div>
+        <div class="publications">
+          <div class="pub-item">
+            <strong>Low-Latency Grant-Free Random Access for 6G NR.</strong>
+            <p class="muted">IEEE Transactions on Wireless Communications, 2024.</p>
+            <details>
+              <summary>BibTeX</summary>
+              <pre>{bibtexGrantfree}</pre>
+            </details>
+          </div>
+          <div class="pub-item">
+            <strong>Scheduling with Mobility-Aware Prediction in NR.</strong>
+            <p class="muted">IEEE Globecom, 2023.</p>
+            <details>
+              <summary>BibTeX</summary>
+              <pre>{bibtexMobility}</pre>
+            </details>
+          </div>
+          <div class="pub-item">
+            <strong>PHY/MAC Co-Design for Multi-User Access.</strong>
+            <p class="muted">IEEE ICC, 2022.</p>
+            <details>
+              <summary>BibTeX</summary>
+              <pre>{bibtexComacro}</pre>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="section-title">
+          <h2>Contact</h2>
+        </div>
+        <div class="card contact">
+          <p>Email: <a href="mailto:kangle.mu@email.com">kangle.mu@email.com</a></p>
+          <p>
+            Calendly:
+            <a href="https://calendly.com/your-handle" target="_blank" rel="noreferrer"
+              >calendly.com/your-handle</a
+            >
+          </p>
+          <p class="muted">Open to collaboration on 5G/6G access, scheduling, and RAN design.</p>
+        </div>
+      </section>
     </main>
 
     <script>
@@ -271,6 +671,43 @@ const scholarAuthorId = import.meta.env.PUBLIC_GOOGLE_SCHOLAR_AUTHOR_ID ?? "3nL-
 
       const formatNumber = (value) =>
         typeof value === "number" ? value.toLocaleString("en-US") : "—";
+
+      const typeTarget = document.querySelector(".name-typewriter");
+      if (typeTarget) {
+        const names = (typeTarget.dataset.names || "").split(",").map((name) => name.trim()).filter(Boolean);
+        let nameIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        const tick = () => {
+          const current = names[nameIndex] ?? "";
+          const nextText = isDeleting
+            ? current.slice(0, charIndex - 1)
+            : current.slice(0, charIndex + 1);
+
+          typeTarget.textContent = nextText || "\u00A0";
+
+          if (!isDeleting && nextText === current) {
+            isDeleting = true;
+            setTimeout(tick, 1900);
+            return;
+          }
+
+          if (isDeleting && nextText === "") {
+            isDeleting = false;
+            nameIndex = (nameIndex + 1) % names.length;
+            setTimeout(tick, 300);
+            return;
+          }
+
+          charIndex = nextText.length;
+          setTimeout(tick, isDeleting ? 70 : 110);
+        };
+
+        if (names.length > 0) {
+          tick();
+        }
+      }
 
       fetch("/api/scholar.json")
         .then((res) => res.json())
