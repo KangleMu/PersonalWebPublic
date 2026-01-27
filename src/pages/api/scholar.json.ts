@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-const CACHE_TTL_MS = 1000 * 60 * 60 * 6;
+const CACHE_TTL_MS = 1000 * 60 * 60 * 24; // 24 hours (once per day)
 
 type ScholarCache = {
   expiresAt: number;
@@ -12,6 +12,23 @@ type ScholarCache = {
     updatedAt: string;
     source: string;
     message?: string;
+  };
+};
+
+type SerpApiResponse = {
+  search_metadata?: {
+    status: string;
+  };
+  error?: string;
+  cited_by?: {
+    table?: Array<{
+      citations?: { all: number };
+      h_index?: { all: number };
+      i10_index?: { all: number };
+      // French locale fallback
+      indice_h?: { all: number };
+      indice_i10?: { all: number };
+    }>;
   };
 };
 
@@ -30,21 +47,15 @@ const setCache = (payload: ScholarCache["payload"]) => {
   };
 };
 
-const parseMetric = (html: string, label: string) => {
-  const regex = new RegExp(
-    `${label}<\\/a>\\s*<\\/td>\\s*<td class="gsc_rsb_std">(\\d[\\d,]*)<`,
-    "i"
-  );
-  const match = html.match(regex);
-  return match ? Number.parseInt(match[1].replace(/,/g, ""), 10) || 0 : 0;
-};
-
 export const GET: APIRoute = async ({ request }) => {
   const cached = getCache();
   if (cached) {
     return new Response(JSON.stringify(cached.payload), {
       status: 200,
-      headers: { "Content-Type": "application/json" }
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "public, max-age=86400" // 24 hours browser/CDN cache
+      }
     });
   }
 
@@ -66,19 +77,30 @@ export const GET: APIRoute = async ({ request }) => {
     );
   }
 
-  const url = new URL("https://scholar.google.com/citations");
-  url.searchParams.set("user", authorId);
-  url.searchParams.set("hl", "en");
+  const apiKey = import.meta.env.SERPAPI_KEY ?? import.meta.env.PUBLIC_SERPAPI_KEY;
+  if (!apiKey) {
+    return new Response(
+      JSON.stringify({
+        status: "missing_config",
+        message: "Set SERPAPI_KEY or PUBLIC_SERPAPI_KEY environment variable to use SerpAPI."
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+  }
 
-  const response = await fetch(url.toString(), {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
-  });
+  const serpApiUrl = new URL("https://serpapi.com/search");
+  serpApiUrl.searchParams.set("engine", "google_scholar_author");
+  serpApiUrl.searchParams.set("author_id", authorId);
+  serpApiUrl.searchParams.set("hl", "en");
+  serpApiUrl.searchParams.set("api_key", apiKey);
+
+  const response = await fetch(serpApiUrl.toString());
   if (!response.ok) {
     const statusText = response.statusText || "Upstream error";
-    const message = `Upstream ${response.status} ${statusText}.`;
+    const message = `SerpAPI ${response.status} ${statusText}.`;
     return new Response(
       JSON.stringify({
         status: "error",
@@ -91,10 +113,45 @@ export const GET: APIRoute = async ({ request }) => {
     );
   }
 
-  const html = await response.text();
-  const citations = parseMetric(html, "Citations");
-  const hIndex = parseMetric(html, "h-index");
-  const i10Index = parseMetric(html, "i10-index");
+  const data: SerpApiResponse = await response.json();
+
+  if (data.error || data.search_metadata?.status !== "Success") {
+    const errorMessage = data.error || "SerpAPI request failed";
+    return new Response(
+      JSON.stringify({
+        status: "error",
+        message: errorMessage
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+  }
+
+  // Extract metrics from cited_by.table array
+  const table = data.cited_by?.table || [];
+  let citations = 0;
+  let hIndex = 0;
+  let i10Index = 0;
+
+  for (const item of table) {
+    if (item.citations?.all !== undefined) {
+      citations = item.citations.all;
+    }
+    // Handle both English (h_index) and French (indice_h) locale keys
+    if (item.h_index?.all !== undefined) {
+      hIndex = item.h_index.all;
+    } else if (item.indice_h?.all !== undefined) {
+      hIndex = item.indice_h.all;
+    }
+    // Handle both English (i10_index) and French (indice_i10) locale keys
+    if (item.i10_index?.all !== undefined) {
+      i10Index = item.i10_index.all;
+    } else if (item.indice_i10?.all !== undefined) {
+      i10Index = item.indice_i10.all;
+    }
+  }
 
   const payload = {
     status: "ok",
@@ -102,13 +159,16 @@ export const GET: APIRoute = async ({ request }) => {
     hIndex,
     i10Index,
     updatedAt: new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }),
-    source: "Google Scholar"
+    source: "SerpAPI"
   };
 
   setCache(payload);
 
   return new Response(JSON.stringify(payload), {
     status: 200,
-    headers: { "Content-Type": "application/json" }
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, max-age=86400" // 24 hours browser/CDN cache
+    }
   });
 };
