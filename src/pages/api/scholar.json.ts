@@ -11,6 +11,7 @@ type ScholarCache = {
     i10Index: number;
     updatedAt: string;
     source: string;
+    message?: string;
   };
 };
 
@@ -76,10 +77,12 @@ export const GET: APIRoute = async ({ request }) => {
     }
   });
   if (!response.ok) {
+    const statusText = response.statusText || "Upstream error";
+    const message = `Upstream ${response.status} ${statusText}.`;
     return new Response(
       JSON.stringify({
         status: "error",
-        message: "Unable to fetch citation stats from Google Scholar."
+        message
       }),
       {
         status: 200,

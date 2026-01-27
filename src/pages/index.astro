@@ -1183,8 +1183,9 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
         .then((res) => res.json())
         .then((data) => {
           if (!data || data.status !== "ok") {
+            const detail = data?.message ? ` Error: ${data.message}` : "";
             updatedEl.textContent =
-              data?.message ?? "Citation stats unavailable. Check API configuration.";
+              `Citation stats unavailable.${detail}`;
             return;
           }
 
