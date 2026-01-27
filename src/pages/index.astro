@@ -198,13 +198,67 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
         margin-top: 16px;
       }
 
+      .cv-updated {
+        font-size: 0.75rem;
+        color: var(--muted);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .cta-row + .cv-updated {
+        margin-top: 0px;
+      }
+
+      .title-block.cv-hovered .cv-updated {
+        opacity: 1;
+      }
+
       .cta {
         text-decoration: none;
         padding: 10px 18px;
         border-radius: 999px;
         border: 1px solid var(--line);
         font-weight: 600;
-        transition: transform 0.2s ease, border-color 0.2s ease;
+        transition: transform 0.25s ease, border-color 0.2s ease;
+      }
+
+      .cta.cv {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        transition: transform 0.45s ease, border-color 0.25s ease, padding 0.35s ease;
+      }
+
+      .cta.cv span {
+        display: inline-flex;
+        justify-content: center;
+        white-space: nowrap;
+        transition: opacity 0.25s ease;
+      }
+
+      .cta.cv .cta-alt {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .cta.cv.is-hovered {
+        padding-left: 45px;
+        padding-right: 45px;
+        transform: translateY(-1px) scale(1.06);
+      }
+
+      .cta.cv.is-hovered .cta-label {
+        opacity: 0;
+      }
+
+      .cta.cv.is-hovered .cta-alt {
+        opacity: 1;
       }
 
       .cta.primary {
@@ -506,6 +560,22 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
         width: 100%;
       }
 
+      .timeline-images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        align-items: flex-start;
+      }
+
+      .timeline-image {
+        height: 100%;
+        max-width: auto;
+        height: 260px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        object-fit: cover;
+      }
+
       .timeline-card h3 {
         margin: 0;
         font-size: 1.05rem;
@@ -691,7 +761,15 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
               <span>Reinforcement Learning</span>
             </div>
             <div class="cta-row">
-              <a class="cta primary" href="#">CV</a>
+              <a
+                class="cta primary cv"
+                href="/src/assets/files/CV-KangleMu-12-20.pdf"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span class="cta-label">CV</span>
+                <span class="cta-alt">Download</span>
+              </a>
               <a
                 class="cta scholar"
                 href={`https://scholar.google.com/citations?user=${scholarAuthorId}`}
@@ -710,6 +788,7 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
               </a>
               <a class="cta email" href="mailto:kangle.mu@northwestern.edu">Email</a>
             </div>
+            <div class="cv-updated">Updated on Dec 20, 2025</div>
           </div>
           <div class="portrait-wrap">
             <img
@@ -826,27 +905,85 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
         </div>
         <div class="timeline">
           <div class="timeline-item">
-            <div class="timeline-date">Jan 2026</div>
+            <div class="timeline-date">May 2025</div>
             <div class="timeline-marker"></div>
             <div class="timeline-card">
-              <h3>Invited Talk on Spectrum Sharing Economics</h3>
-              <p>Presented recent work on market design and fair spectrum access at a regional wireless forum.</p>
+              <h3>Presented Our Paper at IEEE DySPAN2025.</h3>
+              <p>I had the privilege of presenting our paper “Compete or Coordinate? Analysis of Spectrum Sharing Strategies for Local Wireless Services”. 
+
+                Huge thanks to my incredible co-authors for their collaboration and guidance throughout this project Zongyun Xie Igor Kadota Randall Berry Carlos Caicedo William Lehr!</p>
+              <img
+                class="timeline-image"
+                src="/src/assets/figures/dyspan2025.jpeg"
+                alt="DySPAN 2025 presentation"
+                loading="lazy"
+              />
             </div>
           </div>
           <div class="timeline-item">
-            <div class="timeline-date">Oct 2025</div>
+            <div class="timeline-date">Oct 2024</div>
             <div class="timeline-marker"></div>
             <div class="timeline-card">
-              <h3>Paper Accepted to IEEE ICC 2026</h3>
-              <p>Accepted a new paper on mobility-aware scheduling for dense NR deployments.</p>
+              <h3>Received Best Student Paper Award at IEEE WiOPT2024!</h3>
+              <p>Thrilled to share that our paper, "Impact of Geographical Separation on Spectrum Sharing Markets," co-authored with Zongyun Xie, Igor Kadota, Randall A Berry has received the Best Student Paper Award at the IEEE 22nd International Symposium on Modeling and Optimization in Mobile, Ad hoc, and Wireless Networks (WiOPT) 2024!</p>
+              <img
+                class="timeline-image"
+                src="/src/assets/figures/WiOpt_reception.jpeg"
+                alt="WiOpt 2024 reception"
+                loading="lazy"
+              />
             </div>
           </div>
           <div class="timeline-item">
-            <div class="timeline-date">Jun 2025</div>
+            <div class="timeline-date">Jun 2024</div>
             <div class="timeline-marker"></div>
             <div class="timeline-card">
-              <h3>Best Paper Finalist at WiOpt 2025</h3>
-              <p>Shortlisted for best paper with work on grant-free access and collision resolution.</p>
+              <h3>Presented Our Paper at IEEE ICC2024.</h3>
+              <p>Had a great time at IEEE ICC 2024 presenting our work "Market Impacts of Relaxed Incumbent Protection in Spectrum Sharing," co-authored with Prof. Randall Berry. Great to meet our alumnus Dr. Cheng Chen, now a Wireless Standards Engineer at Intel!</p>
+              <div class="timeline-images">
+                <img
+                  class="timeline-image"
+                  src="/src/assets/figures/ICC2024.jpeg"
+                  alt="ICC 2024"
+                  loading="lazy"
+                />
+                <img
+                  class="timeline-image"
+                  src="/src/assets/figures/ICC_CC.jpeg"
+                  alt="IEEE ICC 2024 conference photo"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">May 2024</div>
+            <div class="timeline-marker"></div>
+            <div class="timeline-card">
+              <h3>Received Best Paper Award (Policy Track) at IEEE DySPAN2024!</h3>
+              <p>Thrilled to share that our paper, "Market Impacts of Pooling Intermittent Spectrum," co-authored with Prof. Randall Berry has received the Best Paper Award (policy track) at the IEEE International Symposium on Dynamic Spectrum Access Networks (DySPAN) 2024!</p>
+              <div class="timeline-images">
+                <img
+                  class="timeline-image"
+                  src="/src/assets/figures/DySpan2024_award1.jpg"
+                  alt="Dyspan 2024 Award Photo 1"
+                  loading="lazy"
+                />
+                <img
+                  class="timeline-image"
+                  src="/src/assets/figures/DySpan2024_award2.jpg"
+                  alt="Dyspan 2024 Award Photo 2"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">Nov 2023</div>
+            <div class="timeline-marker"></div>
+            <div class="timeline-card">
+              <h3>Passed PhD Qualifying Exam.</h3>
+              <p>This is the first milestone of my PhD journey!</p>
             </div>
           </div>
         </div>
@@ -942,6 +1079,7 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
       </section>
       -->
 
+      <!--
       <section class="section" id="publications">
         <div class="section-title">
           <h2>Publications</h2>
@@ -973,6 +1111,7 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
           </div>
         </div>
       </section>
+      -->
 
      
     </main>
@@ -1048,6 +1187,37 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
         .catch(() => {
           updatedEl.textContent = "Citation stats unavailable. Try again later.";
         });
+
+      const cvButton = document.querySelector(".cta.cv");
+      const cvContainer = cvButton?.closest(".title-block");
+      let cvHoverLock = false;
+      let cvHoverTimer = null;
+
+      const clearCvHover = () => {
+        cvButton?.classList.remove("is-hovered");
+        cvContainer?.classList.remove("cv-hovered");
+      };
+
+      if (cvButton) {
+        cvButton.addEventListener("mouseenter", () => {
+          if (cvHoverLock) return;
+          cvHoverLock = true;
+          cvButton.classList.add("is-hovered");
+          cvContainer?.classList.add("cv-hovered");
+          if (cvHoverTimer) clearTimeout(cvHoverTimer);
+          cvHoverTimer = setTimeout(() => {
+            cvHoverLock = false;
+            if (!cvButton.matches(":hover")) {
+              clearCvHover();
+            }
+          }, 200);
+        });
+
+        cvButton.addEventListener("mouseleave", () => {
+          if (cvHoverLock) return;
+          clearCvHover();
+        });
+      }
 
       const awardLightbox = document.querySelector("#award-lightbox");
       const awardLightboxImage = document.querySelector("#award-lightbox-image");
