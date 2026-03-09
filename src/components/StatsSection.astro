@@ -5,9 +5,10 @@ interface Props {
   citations: string;
   hIndex: string;
   i10Index: string;
+  updatedAt: string;
 }
 
-const { citations, hIndex, i10Index } = Astro.props;
+const { citations, hIndex, i10Index, updatedAt } = Astro.props;
 ---
 
 <section class="section" id="stats">
@@ -27,5 +28,6 @@ const { citations, hIndex, i10Index } = Astro.props;
         <span class="value">{i10Index}</span>
       </div>
     </div>
+    <p class="stats-updated">Updated on {updatedAt} (Chicago time)</p>
   </div>
 </section>

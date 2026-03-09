@@ -12,7 +12,7 @@ import dyspanAward2 from "../assets/figures/DySpan2024_award2.jpg";
 import csvText from "./scholar_stats.csv?raw";
 
 const [, dataRow] = csvText.trim().split("\n");
-const [citations, hIndex, i10Index] = dataRow.split(",").map((v) => v.trim());
+const [citations, hIndex, i10Index, updatedAt] = dataRow.split(",").map((v) => v.trim());
 
 export const authorName = "Hi, I'm Phil";
 export const scholarAuthorId = "3nL-yukAAAAJ";
@@ -36,6 +36,7 @@ export const stats = {
   citations,
   hIndex,
   i10Index,
+  updatedAt,
 };
 
 export const awards = {

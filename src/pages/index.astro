@@ -41,7 +41,12 @@ import { authorName, scholarAuthorId, profile, stats, awards, newsImages, educat
         cvHref={profile.cvPdf}
       />
 
-      <StatsSection citations={stats.citations} hIndex={stats.hIndex} i10Index={stats.i10Index} />
+      <StatsSection
+        citations={stats.citations}
+        hIndex={stats.hIndex}
+        i10Index={stats.i10Index}
+        updatedAt={stats.updatedAt}
+      />
 
       <AwardsSection
         awardWiopt2024Src={awards.awardWiopt2024.src}
