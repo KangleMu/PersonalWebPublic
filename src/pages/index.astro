@@ -10,8 +10,15 @@ import iccCc from "../assets/figures/ICC_CC.jpeg";
 import dyspanAward1 from "../assets/figures/DySpan2024_award1.jpg";
 import dyspanAward2 from "../assets/figures/DySpan2024_award2.jpg";
 
+import fs from 'node:fs';
+
+const csvPath = new URL('../data/scholar_stats.csv', import.meta.url);
+const csvText = fs.readFileSync(csvPath, 'utf-8');
+const [, dataRow] = csvText.trim().split('\n');
+const [citations, hIndex, i10Index] = dataRow.split(',').map(v => v.trim());
+
 const authorName = "Hi, I'm Phil";
-const scholarAuthorId = import.meta.env.PUBLIC_GOOGLE_SCHOLAR_AUTHOR_ID ?? "3nL-yukAAAAJ";
+const scholarAuthorId = "3nL-yukAAAAJ";
 const bibtexGrantfree = `@article{mu2024grantfree,
   title={Low-Latency Grant-Free Random Access for 6G NR},
   author={Mu, Kangle and Collaborators},
@@ -715,11 +722,7 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
         color: var(--muted);
       }
 
-      #scholar-updated {
-        margin-top: 10px;
-        font-size: 0.85rem;
-        opacity: 0.75;
-      }
+
 
       .fade-in {
         animation: fadeIn 0.6s ease both;
@@ -813,24 +816,23 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
 
       <section class="section" id="stats">
         <div class="section-title">
-          <h2>Live Google Scholar Stats</h2>
+          <h2>Google Scholar Stats</h2>
         </div>
         <div>
-          <div class="stats" id="scholar-stats">
+          <div class="stats">
             <div class="stat-capsule">
               <span class="label">Citations</span>
-              <span class="value" data-stat="citations">—</span>
+              <span class="value">{citations}</span>
             </div>
             <div class="stat-capsule">
               <span class="label">h-index</span>
-              <span class="value" data-stat="hIndex">—</span>
+              <span class="value">{hIndex}</span>
             </div>
             <div class="stat-capsule">
               <span class="label">i10-index</span>
-              <span class="value" data-stat="i10Index">—</span>
+              <span class="value">{i10Index}</span>
             </div>
           </div>
-          <p class="muted" id="scholar-updated">Loading live stats...</p>
         </div>
       </section>
 
@@ -1131,17 +1133,6 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
     </div>
 
     <script>
-      const statsContainer = document.querySelector("#scholar-stats");
-      const updatedEl = document.querySelector("#scholar-updated");
-      const statMap = {
-        citations: statsContainer?.querySelector('[data-stat="citations"]'),
-        hIndex: statsContainer?.querySelector('[data-stat="hIndex"]'),
-        i10Index: statsContainer?.querySelector('[data-stat="i10Index"]')
-      };
-
-      const formatNumber = (value) =>
-        typeof value === "number" ? value.toLocaleString("en-US") : "—";
-
       const typeTarget = document.querySelector(".name-typewriter");
       if (typeTarget) {
         const names = (typeTarget.dataset.names || "").split(",").map((name) => name.trim()).filter(Boolean);
@@ -1179,24 +1170,7 @@ const bibtexComacro = `@inproceedings{mu2022comacro,
         }
       }
 
-      fetch("/api/scholar.json")
-        .then((res) => res.json())
-        .then((data) => {
-          if (!data || data.status !== "ok") {
-            const detail = data?.message ? ` Error: ${data.message}` : "";
-            updatedEl.textContent =
-              `Citation stats unavailable.${detail}`;
-            return;
-          }
 
-          statMap.citations.textContent = formatNumber(data.citations);
-          statMap.hIndex.textContent = formatNumber(data.hIndex);
-          statMap.i10Index.textContent = formatNumber(data.i10Index);
-          updatedEl.textContent = `Updated ${data.updatedAt}. Source: ${data.source}.`;
-        })
-        .catch(() => {
-          updatedEl.textContent = "Citation stats unavailable. Try again later.";
-        });
 
       const cvButton = document.querySelector(".cta.cv");
       const cvContainer = cvButton?.closest(".title-block");
