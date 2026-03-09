@@ -1,0 +1,68 @@
+---
+import SectionTitle from "./SectionTitle.astro";
+
+interface Props {
+  awardWiopt2024Src: string;
+  awardDyspan2024Src: string;
+  wioptLink: string;
+  dyspanLink: string;
+}
+
+const { awardWiopt2024Src, awardDyspan2024Src, wioptLink, dyspanLink } = Astro.props;
+---
+
+<section class="section" id="awards">
+  <SectionTitle title="Awards" />
+  <div class="publications awards-grid">
+    <div class="pub-item">
+      <div class="award-item">
+        <img
+          class="award-image"
+          src={awardWiopt2024Src}
+          alt="Best Student Paper Award at IEEE WiOpt 2024"
+          loading="lazy"
+        />
+        <div>
+          <p class="award-caption">
+            <a href={wioptLink} target="_blank" rel="noreferrer">
+              Best Student Paper Award
+            </a>
+          </p>
+          <p class="award-caption">
+            <a href={wioptLink} target="_blank" rel="noreferrer">
+              IEEE WiOpt 2024
+            </a>
+          </p>
+          <p class="award-subcaption">Recognized for outstanding research at IEEE International Symposium on Modeling and Optimization in Mobile, Ad Hoc, and Wireless Networks.</p>
+        </div>
+      </div>
+    </div>
+    <div class="pub-item">
+      <div class="award-item">
+        <img
+          class="award-image"
+          src={awardDyspan2024Src}
+          alt="Best Paper Award (Policy Track) at IEEE DySPAN 2024"
+          loading="lazy"
+        />
+        <div>
+          <p class="award-caption">
+            <a href={dyspanLink} target="_blank" rel="noreferrer">
+              Best Paper Award (Policy Track)
+            </a>
+          </p>
+          <p class="award-caption">
+            <a href={dyspanLink} target="_blank" rel="noreferrer">
+              IEEE DySPAN 2024
+            </a>
+          </p>
+          <p class="award-subcaption">Recognized for outstanding research on spectrum sharing policies at IEEE International Symposium on Dynamic Spectrum Access Networks</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="award-list">
+    <li>Outstanding Graduate Student — awarded to top 1% of class, 2020</li>
+    <li>China National Scholarship — awarded to top 1% of class, 2018</li>
+  </ul>
+</section>

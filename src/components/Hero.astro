@@ -1,0 +1,69 @@
+---
+interface Props {
+  authorName: string;
+  scholarAuthorId: string;
+  subtitle: string;
+  cvUpdated: string;
+  focusAreas: string[];
+  portraitSrc: string;
+  cvHref: string;
+}
+
+const {
+  authorName,
+  scholarAuthorId,
+  subtitle,
+  cvUpdated,
+  focusAreas,
+  portraitSrc,
+  cvHref,
+} = Astro.props;
+---
+
+<header class="hero fade-in" id="top">
+  <div class="hero-grid">
+    <div class="title-block">
+      <h1>
+        Hi, I'm
+        <span class="name-typewriter" aria-live="polite" data-names="Phil.,Kangle., 康 乐。"></span>
+      </h1>
+      <div class="subtitle" style="padding-bottom: 12px;">{subtitle}</div>
+      <div class="positioning">
+        {focusAreas.map((area) => <span>{area}</span>)}
+      </div>
+      <div class="cta-row">
+        <a class="cta primary cv" href={cvHref} target="_blank" rel="noreferrer">
+          <span class="cta-label">CV</span>
+          <span class="cta-alt">Download</span>
+        </a>
+        <a
+          class="cta scholar"
+          href={`https://scholar.google.com/citations?user=${scholarAuthorId}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Google Scholar
+        </a>
+        <a
+          class="cta linkedin"
+          href="https://www.linkedin.com/in/kangle-mu-8b343a224/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          LinkedIn
+        </a>
+        <a class="cta email" href="mailto:kangle.mu@northwestern.edu">Email</a>
+      </div>
+      <div class="cv-updated">{cvUpdated}</div>
+    </div>
+    <div class="portrait-wrap">
+      <img
+        class="portrait"
+        src={portraitSrc}
+        alt={`${authorName} portrait`}
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+  </div>
+</header>

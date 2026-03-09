@@ -1,0 +1,36 @@
+---
+import SectionTitle from "./SectionTitle.astro";
+
+interface EducationEntry {
+  degree: string;
+  period: string;
+  gpa?: string;
+  highlight?: string;
+}
+
+interface Props {
+  education: readonly EducationEntry[];
+}
+
+const { education } = Astro.props;
+---
+
+<section class="section" id="education">
+  <SectionTitle title="Education" />
+  <div class="publications">
+    {education.map((item) => (
+      <div class="pub-item">
+        <strong>{item.degree}</strong>
+        <p class="muted">{item.period}</p>
+        {item.gpa && <p class="muted">{item.gpa}</p>}
+        {
+          item.highlight && (
+            <p class="muted">
+              <span style="color: rgba(255, 170, 11, 0.887); font-weight: bold;">{item.highlight}</span>
+            </p>
+          )
+        }
+      </div>
+    ))}
+  </div>
+</section>

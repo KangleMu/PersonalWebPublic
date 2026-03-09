@@ -1,0 +1,109 @@
+<script>
+  const typeTarget = document.querySelector(".name-typewriter");
+  if (typeTarget) {
+    const names = (typeTarget.dataset.names || "")
+      .split(",")
+      .map((name) => name.trim())
+      .filter(Boolean);
+    let nameIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    const tick = () => {
+      const current = names[nameIndex] ?? "";
+      const nextText = isDeleting
+        ? current.slice(0, charIndex - 1)
+        : current.slice(0, charIndex + 1);
+
+      typeTarget.textContent = nextText || "\u00A0";
+
+      if (!isDeleting && nextText === current) {
+        isDeleting = true;
+        setTimeout(tick, 1900);
+        return;
+      }
+
+      if (isDeleting && nextText === "") {
+        isDeleting = false;
+        nameIndex = (nameIndex + 1) % names.length;
+        setTimeout(tick, 300);
+        return;
+      }
+
+      charIndex = nextText.length;
+      setTimeout(tick, isDeleting ? 70 : 110);
+    };
+
+    if (names.length > 0) {
+      tick();
+    }
+  }
+
+  const cvButton = document.querySelector(".cta.cv");
+  const cvContainer = cvButton?.closest(".title-block");
+  let cvHoverLock = false;
+  let cvHoverTimer = null;
+
+  const clearCvHover = () => {
+    cvButton?.classList.remove("is-hovered");
+    cvContainer?.classList.remove("cv-hovered");
+  };
+
+  if (cvButton) {
+    cvButton.addEventListener("mouseenter", () => {
+      if (cvHoverLock) return;
+      cvHoverLock = true;
+      cvButton.classList.add("is-hovered");
+      cvContainer?.classList.add("cv-hovered");
+      if (cvHoverTimer) clearTimeout(cvHoverTimer);
+      cvHoverTimer = setTimeout(() => {
+        cvHoverLock = false;
+        if (!cvButton.matches(":hover")) {
+          clearCvHover();
+        }
+      }, 200);
+    });
+
+    cvButton.addEventListener("mouseleave", () => {
+      if (cvHoverLock) return;
+      clearCvHover();
+    });
+  }
+
+  const awardLightbox = document.querySelector("#award-lightbox");
+  const awardLightboxImage = document.querySelector("#award-lightbox-image");
+  const awardCloseButton = document.querySelector(".lightbox-close");
+  const awardImages = document.querySelectorAll(".award-image");
+
+  const closeAwardLightbox = () => {
+    awardLightbox?.classList.remove("is-open");
+    awardLightbox?.setAttribute("aria-hidden", "true");
+    if (awardLightboxImage) {
+      awardLightboxImage.src = "";
+      awardLightboxImage.alt = "";
+    }
+  };
+
+  awardImages.forEach((image) => {
+    image.addEventListener("click", () => {
+      if (!awardLightbox || !awardLightboxImage) return;
+      awardLightboxImage.src = image.getAttribute("src") ?? "";
+      awardLightboxImage.alt = image.getAttribute("alt") ?? "";
+      awardLightbox.classList.add("is-open");
+      awardLightbox.setAttribute("aria-hidden", "false");
+    });
+  });
+
+  awardCloseButton?.addEventListener("click", closeAwardLightbox);
+  awardLightbox?.addEventListener("click", (event) => {
+    if (event.target === awardLightbox) {
+      closeAwardLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAwardLightbox();
+    }
+  });
+</script>

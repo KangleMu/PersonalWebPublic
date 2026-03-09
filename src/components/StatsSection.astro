@@ -1,0 +1,31 @@
+---
+import SectionTitle from "./SectionTitle.astro";
+
+interface Props {
+  citations: string;
+  hIndex: string;
+  i10Index: string;
+}
+
+const { citations, hIndex, i10Index } = Astro.props;
+---
+
+<section class="section" id="stats">
+  <SectionTitle title="Google Scholar Stats" />
+  <div>
+    <div class="stats">
+      <div class="stat-capsule">
+        <span class="label">Citations</span>
+        <span class="value">{citations}</span>
+      </div>
+      <div class="stat-capsule">
+        <span class="label">h-index</span>
+        <span class="value">{hIndex}</span>
+      </div>
+      <div class="stat-capsule">
+        <span class="label">i10-index</span>
+        <span class="value">{i10Index}</span>
+      </div>
+    </div>
+  </div>
+</section>
