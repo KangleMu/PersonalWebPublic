@@ -10,10 +10,7 @@ import iccCc from "../assets/figures/ICC_CC.jpeg";
 import dyspanAward1 from "../assets/figures/DySpan2024_award1.jpg";
 import dyspanAward2 from "../assets/figures/DySpan2024_award2.jpg";
 
-import fs from 'node:fs';
-
-const csvPath = new URL('../data/scholar_stats.csv', import.meta.url);
-const csvText = fs.readFileSync(csvPath, 'utf-8');
+import csvText from '../data/scholar_stats.csv?raw';
 const [, dataRow] = csvText.trim().split('\n');
 const [citations, hIndex, i10Index] = dataRow.split(',').map(v => v.trim());
 
